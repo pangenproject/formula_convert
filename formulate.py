@@ -1,5 +1,3 @@
-cnf = [[1, 2], [1,-3], [2, 4], [-3, -4], [-1, -4]]
-
 import numpy
 
 X = 0
@@ -28,5 +26,3 @@ def formulate(cnfs, N):
             qubo[i,j] = qubo[i,j] + 1/2
             qubo[j,i] = qubo[j,i] + 1/2
     return qubo
-
-formulate(cnf, 4)
