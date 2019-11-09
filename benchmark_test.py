@@ -30,14 +30,22 @@ def tcnfgen(m,k):
     
     def unique(l,k):
         t = wzero(k)
-        while(t in l):
+        while(t in l or t.reverse() in l):
             t = wzero(k)
         return t
 
     for i in range(m):
-        x = unique([],k)
-        y = unique([x],k)
-        z = unique([x, y],k)
+        x = wzero(k)
+        
+        y = wzero(k)
+        while abs(y) == abs(x):
+            y = wzero(k)
+        while([x,y] in cnf):
+            x = wzero(k)
+            y = wzero(k)
+            while abs(y) == abs(x):
+                y = wzero(k)
+        
 
         cnf.append([x,y])
 
