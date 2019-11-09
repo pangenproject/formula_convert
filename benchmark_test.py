@@ -4,22 +4,43 @@ import numpy
 N = 10**3
 M = 10**3
 
-def tcnfgen(m,k,horn=1):
+import random
+import numpy
+
+N = 10**3
+M = 10**3
+
+def tcnfgen(m,k):
     cnf = []
-    def unique(l,k):
-        t = random.randint(-k,k)
-        while(t in l):
-            t = random.randint(-k,k)
+    
+    def wzero(k):
+        t = random.randint(-k+1,k)
+        s = sgn(t)
+        if s<= 0:
+            t = t-1
         return t
-    r = (lambda : random.randint(0,1))
+    
+    def sgn(k):
+    if(k>0):
+        return 1
+    elif(k==0):
+        return 0
+    elif(k<0):
+        return -1
+    
+    def unique(l,k):
+        t = wzero(k)
+        while(t in l):
+            t = wzero(k)
+        return t
+
     for i in range(m):
         x = unique([],k)
         y = unique([x],k)
         z = unique([x, y],k)
-        if horn:
-            cnf.append([x,y])
-        else:
-            cnf.append([(x,r()), (y,r())])
+
+        cnf.append([x,y])
+
     return cnf
 a = tcnfgen(M,N)
 
