@@ -4,12 +4,6 @@ import numpy
 N = 10**3
 M = 10**3
 
-import random
-import numpy
-
-N = 10**3
-M = 10**3
-
 def tcnfgen(m,k):
     cnf = []
     
