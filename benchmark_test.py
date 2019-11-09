@@ -21,12 +21,12 @@ def tcnfgen(m,k):
         return t
     
     def sgn(k):
-    if(k>0):
-        return 1
-    elif(k==0):
-        return 0
-    elif(k<0):
-        return -1
+        if(k>0):
+            return 1
+        elif(k==0):
+            return 0
+        elif(k<0):
+            return -1
     
     def unique(l,k):
         t = wzero(k)
