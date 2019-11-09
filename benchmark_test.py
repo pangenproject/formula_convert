@@ -1,8 +1,8 @@
 import random
 import numpy
 
-N = 10**4
-M = 10**4
+N = 10**3
+M = 10**3
 
 def tcnfgen(m,k,horn=1):
     cnf = []
@@ -53,6 +53,16 @@ def formulate(cnfs, N):
     return qubo
 q= formulate(a,N)
 
+import datetime
+start = datetime.datetime.now()
+print("script execution stared at:", start)
 b = wq.opt()
 b.qubo = q
 b.sa()
+print("script run times")
+end = datetime.datetime.now()
+print("Script execution ended at:", end)
+total_time = end - start
+print("Script totally ran for :", total_time)
+
+
