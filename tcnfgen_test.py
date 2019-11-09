@@ -1,4 +1,5 @@
 import pycosat
+import matplotlib.pyplot as plt
 N= 100
 M=100
 C=[]
