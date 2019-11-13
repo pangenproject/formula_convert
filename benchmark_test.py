@@ -79,7 +79,7 @@ def formulate(cnfs, N):
 
 
 
-N= 10
+N= 100
 M= 10
 C = []
 for i in range(1, N):
@@ -105,3 +105,6 @@ for i in range(1, N):
         writer = csv.writer(myFile)
         print([2*i/N], [(M-s)/M])
         writer.writerows([[2*i/N, (M-s)/M, (M-m)/M]])
+
+# plt.plot([x[0] for x in C], [y[1] for y in C])
+
