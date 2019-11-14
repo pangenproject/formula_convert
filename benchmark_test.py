@@ -96,7 +96,7 @@ for i in range(1, N):
 
         if np.dot(X, np.dot(q, X))+const == 0:
             s = s+1
-        if pycosat.solve(tcnfgen(alfa, N)) == 'UNSAT':
+        if pycosat.solve(f) == 'UNSAT':
             m = m+1
 
     C.append([2*i/N, (M-s)/M, (M-m)/M])
