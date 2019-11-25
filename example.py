@@ -1,62 +1,59 @@
 import math
-N= 20
-Z=2
-M= 20
-C = []
-Cavg = []
+import numpy as np
+import pycosat as pysat
+import csv
+
+N = 20
+REPEAT = 20
+list_results = []
+
+
+def dw_solve(formulas):
+    dw_instance = wq.opt()
+    dw_instance.qubo = q
+    dw_instance.dwavetoken = "DEV-283ae48a24e86ddd7654f48e223202dfd4a26ce0"
+    spins_conf = dw_instance.dw()
+    bin_vector_dw = [1 if spin == 1 else 0 for spin in spins_conf]
+
+    return bin_vector_dw
+
+def wq_solve(formulas):
+    wildqat_instance = wq.opt()
+    wildqat_instance.qubo = q
+
+    bin_vector_wildqat = wildqat_instance.sa()
+
+    return bin_vector_wildqat
+
+
+
 for i in range(1, N):
-    s = 0
-    t = 0
-    m = 0
-    alfa = 2*i
-    dwAVG = 0
-    wqAVG = 0
-    for j in range(0, M):
-        f = tcnfgen(alfa, N)
-        q, const = formulate(f, N)
-        b = wq.opt()
-        b.qubo = q
-        b.dwavetoken = "DEV-283ae48a24e86ddd7654f48e223202dfd4a26ce0"
-        X = b.dw()
-        a = wq.opt()
-        a.qubo = q
-        Y = a.sa()
-        for i in range(0,Z):
-          X = b.dw()
-          X=[1 if x==1 else 0 for x in X]
-          if np.dot(X, np.dot(q, X))+const == 0:
-            s = s+1
-            break
+    d, w, p = 0, 0, 0
+    alfa = 2 * i
 
-        X=[1 if x==1 else 0 for x in X]
-        if np.dot(X, np.dot(q, X))+const == 0:
-            s = s+1
-        dwAVG = dwAVG + np.dot(X, np.dot(q, X))+const
-        for i in range(0,Z):
-          Y = a.sa()
-          
-          if np.dot(X, np.dot(q, X))+const == 0:
-            t = t+1
-            break
+    for j in range(0, REPEAT):
+
+        cnf_formulas = tcnfgen(alfa, N)
+
+        q, const = formulate(cnf_formulas, N)
 
 
-        if np.dot(Y, np.dot(q, Y))+const == 0:
-            t = t+1
-        wqAVG = wqAVG + np.dot(Y, np.dot(q, Y))+const
-        if pycosat.solve(f) == 'UNSAT':
-            m = m+1
-            
-       
-    results = [alfa/N,s/M,(M-m)/M]
-    resultsAVG = [dwAVG/M,wqAVG/N]
-    C.append(results)
-    C.append(resultsAVG)
-    myFile = open('battle3.csv', 'a')
-    myFileAVG = open('battleAVG.csv','a')
+        bin_vector_dw = dw_solve(formulas=cnf_formulas)
+        if np.dot(bin_vector_dw, np.dot(q, bin_vector_dw)) + const == 0:
+            d = d + 1
+
+        bin_vector_wildqat = wq_solve(formulas=cnf_formulas)
+
+        if np.dot(bin_vector_wildqat, np.dot(q, bin_vector_wildqat)) + const == 0:
+            w = w + 1
+
+        if pysat.solve(cnf_formulas) == 'UNSAT':
+            p = p + 1
+
+    results = [alfa/N, d/REPEAT, (REPEAT-w)/REPEAT, (REPEAT-p)/REPEAT]
+    list_results.append(results)
+    myFile = open('compare.csv', 'a')
     with myFile:
         writer = csv.writer(myFile)
         print(results)
         writer.writerows([results])
-        writer = csv.writer(myFileAVG)
-        print(results)
-        writer.writerows([resultsAVG])
